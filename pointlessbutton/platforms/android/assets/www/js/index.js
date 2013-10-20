@@ -34,16 +34,27 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+
+        pb = document.getElementById('pb');
+        debug = document.getElementById('debug-message');
+        debug2 = document.getElementById('debug-message-2');
+
+        pb.addEventListener('touchstart', function(e){
+            // Detects a touch start event
+            debug.innerHTML = 'Status: touch';
+            debug2.innerHTML = '[X: , Y: ], [Drag: ], [Start: ], [Location: ]'
+            e.preventDefault();
+        }, false);
+
+        pb.addEventListener('touchend', function(e){
+            // Detects a touch end event
+            debug.innerHTML = 'Status: released';
+            debug2.innerHTML = '[X: , Y: ], [Drag: ], [End: (duration: )], [Location: ]'
+            e.preventDefault();
+        }, false);
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
         console.log('Received Event: ' + id);
     }
 };
