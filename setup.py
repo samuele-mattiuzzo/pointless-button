@@ -21,33 +21,44 @@ DEV_PLUGINS = [
 	'https://git-wip-us.apache.org/repos/asf/cordova-plugin-console.git',  # Debug console
 ]
 
-REMOVE_PLUGINS = []
 
 # DO NOT CHANGE UNLESS PRE-DISCUSSED
 INSTALL_DIR = 'pointlessbutton/'
 
+def clean_list(raw_list):
+	# parses the output from popen
+	_replace_chars = ['"\n  ', '[', ']', '\'']
+	for _r_c in _replace_chars:
+		raw_list = raw_list.replace(_r_c, '')
+	return [el.strip() for el in raw_list.split(',')]
+
+
 def get_installed_plugins():
-	plugin_list = os.popen('cordova plugin ls')
-	print plugin_list
-	print typeof(plugin_list)
-	return []
+	# usable list of installed plugins
+	proc = os.popen('cordova plugin ls')
+	plugin_list = proc.read()
+	proc.close()
+	return clean_list(plugin_list)
+
 
 def clean():
+	# removes all installed plugins
 	for plugin in get_installed_plugins():
 		remove_plugin(plugin)
+
 
 def remove_plugin(plugin):
 	# helper for code readability
 	os.system('phonegap local plugin remove ' + plugin)
 
+
 def install_plugin(plugin):
 	# helper for code readability
 	os.system('phonegap local plugin add ' + plugin)
 
+
 os.chdir(INSTALL_DIR)
 user_args = sys.argv
-
-print os.getcwd()
 
 if len(user_args) > 2:
 	# No cheating
@@ -81,15 +92,14 @@ $ python app_plugins_install.py [options]
 	elif '--clean' in user_args:
 		# Cleans all packages from your disk
 		clean()
-		print 'Not Yet Implemented'
 
 	elif '--remove' in user_args:
 		# Removes packages selectively
 		for plugin in get_installed_plugins():
-			remove = raw_input('Remove {}? [y/n]'.format(plugin))
+			remove = raw_input('Remove {}? [y/n]: '.format(plugin))
 			if remove in ['y', 'Y']:
 				remove_plugin(plugin)
 
 	else:
-		# 
+		# Default
 		print 'Invalid option'
