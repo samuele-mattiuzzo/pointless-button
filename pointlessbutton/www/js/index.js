@@ -41,13 +41,15 @@ var app = {
 
         pb.addEventListener('touchstart', function(e){
             // Detects a touch start event
-            debug.innerHTML = 'Touchstarted';
+            debug.innerHTML = 'Status: touch';
+            debug2.innerHTML = '[X: , Y: ], [Drag: ], [Start: ], [Location: ]'
             e.preventDefault();
         }, false);
 
         pb.addEventListener('touchend', function(e){
             // Detects a touch end event
-            debug2.innerHTML = 'Toudchended';
+            debug.innerHTML = 'Status: released';
+            debug2.innerHTML = '[X: , Y: ], [Drag: ], [End: (duration: )], [Location: ]'
             e.preventDefault();
         }, false);
     },
