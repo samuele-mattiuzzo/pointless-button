@@ -2,7 +2,6 @@
 
 import os
 import sys
-from subprocess import call
 
 # new plugins need to go here
 PLUGINS = [
