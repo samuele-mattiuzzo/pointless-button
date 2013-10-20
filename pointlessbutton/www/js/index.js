@@ -40,11 +40,13 @@ var app = {
         debug2 = document.getElementById('debug-message-2');
 
         pb.addEventListener('touchstart', function(e){
+            // Detects a touch start event
             debug.innerHTML = 'Touchstarted';
             e.preventDefault();
         }, false);
 
         pb.addEventListener('touchend', function(e){
+            // Detects a touch end event
             debug2.innerHTML = 'Toudchended';
             e.preventDefault();
         }, false);
