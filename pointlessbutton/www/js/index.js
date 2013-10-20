@@ -34,6 +34,20 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+
+        pb = document.getElementById('pb');
+        debug = document.getElementById('debug-message');
+        debug2 = document.getElementById('debug-message-2');
+
+        pb.addEventListener('touchstart', function(e){
+            debug.innerHTML = 'Touchstarted';
+            e.preventDefault();
+        }, false);
+
+        pb.addEventListener('touchend', function(e){
+            debug2.innerHTML = 'Toudchended';
+            e.preventDefault();
+        }, false);
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
