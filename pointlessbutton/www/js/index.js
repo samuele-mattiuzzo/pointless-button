@@ -16,6 +16,55 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
+// Event-to-json
+// Main logic (temporary, will be more complex)
+function pointlessData(evt, evt_type) {
+
+    // Types of events:
+    // - touchstart: start time, x, y coordinates, location
+    // - touchend: end time, duration, time of the day
+    // Dumps a JSON object
+
+    if (evt_type == "touchstart") {
+
+        var jsonPointlessData = {"pointless": []};
+        var start = new Date().getTime()/1000;
+
+        jsonPointlessData["pointless"].push({
+            "x": evt.touches[0].pageX,
+            "y": evt.touches[0].pageY,
+            "start": start,
+            "location": ''
+        });
+        return jsonPointlessData;
+    }
+
+    if (evt_type == "touchend") {
+
+        var jsonPointlessData = {"pointless": []};
+        var end = new Date().getTime()/1000;
+        var time = new Date();
+        var duration = 'duration';
+
+        //end - this.touchStartData["pointless"]["start"];
+        jsonPointlessData["pointless"].push({
+            "end": end,
+            "time": time,
+            "duration": duration,
+        });
+        return jsonPointlessData;
+    }
+
+};
+
+
+// Saves in DB
+function save() {
+    console.log('save');
+};
+
+
 var app = {
     // TouchStartData
     touchStartData: '',
@@ -46,20 +95,18 @@ var app = {
 
         pb.addEventListener('touchstart', function(e){
             // Detects a touch start event
-            debug.innerHTML = 'Status: touch';
-
-            this.touchStartData = this.pointlessData(e, 'touchend');
+            //debug.innerHTML = 'Status: touch';
+            debug.innerHTML = JSON.stringify(pointlessData(e, 'touchstart'), undefined, 2);
             e.preventDefault();
         }, false);
 
         pb.addEventListener('touchend', function(e){
             // Detects a touch end event
-            debug.innerHTML = 'Status: released';
+            //debug.innerHTML = 'Status: released';
 
             // TODO: make sure this is syncronized
             // Possibly create an EventRegister object that will be dumped to db
-            this.touchEndData = this.pointlessData(e, 'touchend');
-            debug2.innerHTML = JSON.stringify(this.touchStartData + this.touchEndData, undefined, 2);
+            debug2.innerHTML = JSON.stringify(pointlessData(e, 'touchend'), undefined, 2);
             e.preventDefault();
 
             // TODO: store in db
@@ -69,47 +116,6 @@ var app = {
     // Update DOM on a Received Event
     receivedEvent: function(id) {
         console.log('Received Event: ' + id);
-    },
-
-    // Saves in DB
-    save: function() {
-        var jsonObj = this.touchStartData + this.touchEndData;
-        console.log(JSON.stringify(jsonObj["poinless"]));
-    },
-
-    // Event-to-json
-    // Main logic (temporary, will be more complex)
-    pointlessData: function(evt, evt_type) {
-        var jsonPointlessData = {"pointless": []};
-
-        // Types of events:
-        // - touchstart: start time, x, y coordinates, location
-        // - touchend: end time, duration, time of the day
-        // Dumps a JSON object
-
-        if (evt_type == "touchstart") {
-            var start = new Date().get_time()/1000;
-
-            jsonPointlessData["pointless"].push({
-                "x": e.screenX || e.pageX || e.clientX,
-                "y": e.screenY || e.pageY || e.clientY,
-                "start": start,
-                "location": ''
-            });
-        }
-
-        if (evt_type == "touchend") {
-            var end = new Date().get_time()/1000;
-            var time = new Date().format("dd/M/yy h:mm tt");
-            var duration = end - this.touchStartData["pointless"]["start"];
-
-            jsonPointlessData["pointless"].push({
-                "end": end,
-                "time": time,
-                "duration": duration,
-            });
-        }
-
-        return jsonPointlessData;
     }
+
 };
