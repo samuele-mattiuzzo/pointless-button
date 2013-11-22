@@ -37,7 +37,7 @@ body {
     );
     background-attachment:fixed;
     font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
-    font-size:12px;
+    font-size:14px;
     height:100%;
     margin:0px;
     padding:0px;
@@ -47,15 +47,14 @@ body {
 
 /* Portrait layout (default) */
 .app {
-    background:url(../img/logo.png) no-repeat center top; /* 170px x 200px */
     position:absolute;             /* position in the center of the screen */
-    left:50%;
-    top:50%;
-    height:50px;                   /* text area height */
+    left:38%;
+    top:30%;
+    height:150px;                   /* text area height */
     width:225px;                   /* text area width */
     text-align:center;
-    padding:180px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
-    margin:-115px 0px 0px -112px;  /* offset vertical: half of image height and text area height */
+    padding:30px 0px 0px 0px;     /* image height is 200px (bottom 20px are overlapped with text) */
+    margin:-50px 0px 0px -82px;  /* offset vertical: half of image height and text area height */
                                    /* offset horizontal: half of text area width */
 }
 
@@ -73,6 +72,7 @@ h1 {
     font-size:24px;
     font-weight:normal;
     margin:0px;
+    margin-bottom: 25px;
     overflow:visible;
     padding:0px;
     text-align:center;
@@ -88,15 +88,16 @@ a {
     font-weight: 700;
     font-size: 3em;
     display: block;
-    padding: 4px;
+    vertical-align: middle;
+    padding: 45% auto;
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     border-radius: 8px;
     -webkit-box-shadow: 0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
     -moz-box-shadow: 0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
     box-shadow: 0px 9px 0px rgba(219,31,5,1), 0px 9px 25px rgba(0,0,0,.7);
-    margin: 100px auto;
-    width: 160px;
+    width: 350px;
+    height: 350px;
     text-align: center;
     
     -webkit-transition: all .1s ease;
@@ -112,4 +113,13 @@ a:active {
     box-shadow: 0px 3px 0px rgba(219,31,5,1), 0px 3px 6px rgba(0,0,0,.9);
     position: relative;
     top: 6px;
+}
+
+#debug = {
+    font-size:20px;
+    font-weight:normal;
+    margin:0px;
+    overflow:visible;
+    padding:0px;
+    text-align:center; 
 }

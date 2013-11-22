@@ -121,6 +121,13 @@ module.exports = [
         "clobbers": [
             "window.resolveLocalFileSystemURI"
         ]
+    },
+    {
+        "file": "plugins/com.phonegap.plugins.sqlite/www/SQLitePlugin.js",
+        "id": "com.phonegap.plugins.sqlite.SQLitePlugin",
+        "clobbers": [
+            "SQLitePlugin"
+        ]
     }
 ]
 });

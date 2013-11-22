@@ -19,6 +19,8 @@
 
 // Event-to-json
 // Main logic (temporary, will be more complex)
+
+
 function pointlessData(evt, evt_type) {
 
     // Types of events:
@@ -28,8 +30,10 @@ function pointlessData(evt, evt_type) {
 
     if (evt_type == "touchstart") {
 
-        var jsonPointlessData = {"pointless": []};
-        var start = new Date().getTime()/1000;
+        var jsonPointlessData = {
+            "pointless": []
+        };
+        var start = new Date().getTime() / 1000;
 
         jsonPointlessData["pointless"].push({
             "x": evt.touches[0].pageX,
@@ -42,8 +46,10 @@ function pointlessData(evt, evt_type) {
 
     if (evt_type == "touchend") {
 
-        var jsonPointlessData = {"pointless": []};
-        var end = new Date().getTime()/1000;
+        var jsonPointlessData = {
+            "pointless": []
+        };
+        var end = new Date().getTime() / 1000;
         var time = new Date();
         var duration = 'duration';
 
@@ -59,21 +65,54 @@ function pointlessData(evt, evt_type) {
 };
 
 
-// Saves in DB
-function save() {
-    console.log('save');
-};
+function init() {
+    //db.transaction(populateDB, errorCB, successCB);  
+}
+
 
 
 var app = {
+     
     // TouchStartData
     touchStartData: '',
     // TouchEndData
     touchEndData: '',
 
+    db: '',
+
+    populateDB: function(tx) {
+        tx.executeSql('DROP TABLE IF EXISTS DEMO');
+        tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (id unique, data)');
+        tx.executeSql('INSERT INTO DEMO (id, data) VALUES (1, "First row")');
+        tx.executeSql('INSERT INTO DEMO (id, data) VALUES (2, "Second row")');
+    },
+
+    errorCB: function(err) {
+        console.log("Error processing SQL: " + err.code);
+    },
+
+    queryDB: function(tx) {
+        tx.executeSql('SELECT * FROM DEMO', [], querySuccess, errorCB);
+    },
+
+    // Query the success callback
+    //
+
+    successCB: function(tx, results) {
+        // this will be empty since no rows were inserted.
+        console.log("Insert ID = " + results.insertId);
+        // this will be 0 since it is a select statement
+        console.log("Rows Affected = " + results.rowAffected);
+        // the number of rows returned by the select statement
+        console.log("Insert ID = " + results.rows.length);
+    },
+
+    
     // Application Constructor
     initialize: function() {
         this.bindEvents();
+        
+       // createDB();
     },
     // Bind Event Listeners
     //
@@ -88,19 +127,22 @@ var app = {
     // function, we must explicity call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-
+       
+        // Create db
+        db =  window.openDatabase("Database", "1.0", "Cordova Demo", 65535);
         pb = document.getElementById('pb');
         debug = document.getElementById('debug-message');
         debug2 = document.getElementById('debug-message-2');
 
-        pb.addEventListener('touchstart', function(e){
+        pb.addEventListener('touchstart', function(e) {
             // Detects a touch start event
             //debug.innerHTML = 'Status: touch';
             debug.innerHTML = JSON.stringify(pointlessData(e, 'touchstart'), undefined, 2);
             e.preventDefault();
+           
         }, false);
 
-        pb.addEventListener('touchend', function(e){
+        pb.addEventListener('touchend', function(e) {
             // Detects a touch end event
             //debug.innerHTML = 'Status: released';
 
@@ -110,7 +152,6 @@ var app = {
             e.preventDefault();
 
             // TODO: store in db
-            this.save();
         }, false);
     },
     // Update DOM on a Received Event
