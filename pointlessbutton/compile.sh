@@ -1,1 +1,1 @@
-sudo phonegap local run android && adb logcat -c | adb logcat | grep 'Web Console'
+phonegap local run android && adb logcat -c | adb logcat | grep 'Web Console'
