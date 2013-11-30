@@ -154,18 +154,18 @@ var app = {
             // Detects a touch start event
             pointlessData(e, 'touchstart');
             e.preventDefault();
+
             db.transaction(queryDB, errorCB);
         }, false);
 
         pb.addEventListener('touchend', function(e) {
             // Detects a touch end event
-            // TODO: make sure this is syncronized
-            // Possibly create an EventRegister object that will be dumped to db
-
             pointlessData(e, 'touchend');
             e.preventDefault();
-            save(JSON.stringify(touchData.pointless, undefined, 2), db);
+
+            save(touchData.pointless, db);
             db.transaction(queryDB, errorCB);
+
         }, false);
     },
     // Update DOM on a Received Event
