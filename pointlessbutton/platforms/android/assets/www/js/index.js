@@ -19,7 +19,17 @@
 
 // Event-to-json
 // Main logic (temporary, will be more complex)
+var DEBUG = true;
 
+var touchData = {
+    "pointless": [],
+};
+var app_db = {
+    'display_name': 'Database',
+    'version': '1.0',
+    'table': 'Cordova Demo',
+    'size': 65535
+};
 
 function pointlessData(evt, evt_type) {
 
@@ -30,54 +40,48 @@ function pointlessData(evt, evt_type) {
 
     if (evt_type == "touchstart") {
 
-        var jsonPointlessData = {
-            "pointless": []
-        };
         var start = new Date().getTime() / 1000;
 
-        jsonPointlessData["pointless"].push({
+        touchData["pointless"].push({
             "x": evt.touches[0].pageX,
             "y": evt.touches[0].pageY,
             "start": start,
             "location": ''
         });
-        return jsonPointlessData;
     }
 
     if (evt_type == "touchend") {
 
-        var jsonPointlessData = {
-            "pointless": []
-        };
         var end = new Date().getTime() / 1000;
         var time = new Date();
         var duration = 'duration';
 
-        //end - this.touchStartData["pointless"]["start"];
-        jsonPointlessData["pointless"].push({
+        touchData["pointless"].push({
             "end": end,
             "time": time,
             "duration": duration,
         });
-        return jsonPointlessData;
     }
 
-};
+}
 
 // TODO put these functions in global.js
-// DROP TABLE It's just for testing
+// DROP TABLE Is just for testing
 function initDB(tx) {
-    tx.executeSql('DROP TABLE IF EXISTS POINTLESS'); 
+    if (DEBUG){
+        tx.executeSql('DROP TABLE IF EXISTS POINTLESS');
+    }
     tx.executeSql('CREATE TABLE IF NOT EXISTS POINTLESS (id unique, x, y, start, location, end, time, duration)');
 }
 
-// Save data JSON on db
+// Save data JSON on db 
+// TODO: check if it's start or end event or make 2 different tables and external key for reference
 function save(data, db) {
     data = JSON.stringify(data);
 
     db.transaction(function (tx) {
         console.log('saving ' + data);
-        var sqlInsert = "INSERT INTO POINTLESS (' + data.x + ',' + data.y + ',' + data.start + ',' + data.location + ',' + data.end + ',' data.time + ',' + data.duration + ')'"
+        var sqlInsert = 'INSERT INTO POINTLESS (' + data.x + ',' + data.y + ',' + data.start + ',' + data.location + ',' + data.end + ',' + data.time + ',' + data.duration + ');';
         console.log(sqlInsert);
         tx.executeSql(sqlInsert);
     }, errorCB, successCB);
@@ -102,25 +106,17 @@ function successCB(tx, results) {
     for (var i = 0; i < len; i++) {
         console.log("Row = " + i + " ID = " + results.rows.item(i).id + " Data =  " + results.rows.item(i).data);
     }
+    
+    //debug2.innerHTML = JSON.stringify(results, undefined, 2);
 }
 
 var app = {
 
-    // TouchStartData
-    touchStartData: '',
-    // TouchEndData
-    touchEndData: '',
-
-    db: '',
-
-
-
     // Application Constructor
     initialize: function() {
         this.bindEvents();
-
-        // createDB();
     },
+
     // Bind Event Listeners
     //
     // Bind any events that are required on startup. Common events are:
@@ -136,7 +132,13 @@ var app = {
         app.receivedEvent('deviceready');
 
         // Create db
-        db = window.openDatabase("Database", "1.0", "Cordova Demo", 65535);
+        db = window.openDatabase(
+            app_db.display_name,
+            app_db.version,
+            app_db.table,
+            app_db.size
+        );
+        
         // Create tables
         //db.transaction(populateDB, errorCB, successCB);
         // We don't need successCB as callback, it's a create TABE sql statement
@@ -150,27 +152,20 @@ var app = {
 
         pb.addEventListener('touchstart', function(e) {
             // Detects a touch start event
-            //debug.innerHTML = 'Status: touch';
-            var dataStart = pointlessData(e, 'touchstart');
-            debug.innerHTML = JSON.stringify(dataStart, undefined, 2);
+            pointlessData(e, 'touchstart');
             e.preventDefault();
-            save(JSON.stringify(dataStart, undefined, 2).pointless, db);
             db.transaction(queryDB, errorCB);
         }, false);
 
         pb.addEventListener('touchend', function(e) {
             // Detects a touch end event
-            //debug.innerHTML = 'Status: released';
-
             // TODO: make sure this is syncronized
             // Possibly create an EventRegister object that will be dumped to db
 
-            var dataEnd = pointlessData(e, 'touchend');
-            debug2.innerHTML = JSON.stringify(pointlessData(e, 'touchend'), undefined, 2);
+            pointlessData(e, 'touchend');
             e.preventDefault();
-            save(JSON.stringify(pointlessData(e, 'touchend').pointless, undefined, 2), db);
+            save(JSON.stringify(touchData.pointless, undefined, 2), db);
             db.transaction(queryDB, errorCB);
-            // TODO: store in db
         }, false);
     },
     // Update DOM on a Received Event
