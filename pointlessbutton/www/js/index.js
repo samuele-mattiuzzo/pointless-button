@@ -81,7 +81,7 @@ function save(data, db) {
 
     db.transaction(function (tx) {
         console.log('saving ' + data);
-        var sqlInsert = "INSERT INTO POINTLESS (' + data.x + ',' + data.y + ',' + data.start + ',' + data.location + ',' + data.end + ',' data.time + ',' + data.duration + ')'";
+        var sqlInsert = 'INSERT INTO POINTLESS (' + data.x + ',' + data.y + ',' + data.start + ',' + data.location + ',' + data.end + ',' + data.time + ',' + data.duration + ');';
         console.log(sqlInsert);
         tx.executeSql(sqlInsert);
     }, errorCB, successCB);
@@ -107,8 +107,7 @@ function successCB(tx, results) {
         console.log("Row = " + i + " ID = " + results.rows.item(i).id + " Data =  " + results.rows.item(i).data);
     }
     
-    debug2.innerHTML = JSON.stringify(results, undefined, 2);
-
+    //debug2.innerHTML = JSON.stringify(results, undefined, 2);
 }
 
 var app = {
