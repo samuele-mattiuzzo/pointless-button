@@ -2,12 +2,14 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
            id="org.apache.cordova.console"
-      version="0.2.3">
+      version="0.2.4">
 
     <name>Console</name>
     <description>Cordova Console Plugin</description>
     <license>Apache 2.0</license>
     <keywords>cordova,console</keywords>
+    <repo>https://git-wip-us.apache.org/repos/asf/cordova-plugin-console.git</repo>
+    <issue>https://issues.apache.org/jira/browse/CB/component/12320644</issue>
 
     <!-- ios -->
     <platform name="ios">

@@ -2,11 +2,13 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
            id="org.apache.cordova.globalization"
-      version="0.2.2">
+      version="0.2.3">
     <name>Globalization</name>
     <description>Cordova Globalization Plugin</description>
     <license>Apache</license>
     <keywords>cordova,globalization</keywords>
+    <repo>https://git-wip-us.apache.org/repos/asf/cordova-plugin-globalization.git</repo>
+    <issue>https://issues.apache.org/jira/browse/CB/component/12320649</issue>
 
     <js-module src="www/GlobalizationError.js" name="GlobalizationError">
         <clobbers target="window.GlobalizationError" />
