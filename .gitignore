@@ -2,3 +2,4 @@ pointlessbutton/platforms/android/local.properties
 pointlessbutton/platforms/android/AndroidManifest.xml
 pointlessbutton/platforms/android/bin/
 pointlessbutton/platforms/android/assets/www/
+platforms/android/gen/

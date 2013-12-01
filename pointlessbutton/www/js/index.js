@@ -108,21 +108,35 @@ function errorCB(err) {
     console.log("[ ERROR ] Processing SQL: " + err.code + "\n" + err.message);
 }
 
+// Show results from the query
+function successCB(tx, results) {
+    console.log(results.rows);
+    console.log("DEMO table: " + results.rows.length + " rows found.");
+    var items = [];
+
+    for (var i = 0; i < results.rows.length; i++) {
+        var item = results.rows.item(i);
+        items.push({
+            'row': i,
+            'id': item.id,
+            'x': item.x,
+            'y': item.y,
+            'location': item.location,
+            'start': item.start,
+            'end': item.end,
+            'duration': item.duration
+        });
+    }
+    console.log(JSON.stringify(items));
+}
+
 // Show table POINTLESS
 function queryDB(tx) {
     // We use sucessCB to show query results
     tx.executeSql('SELECT * FROM POINTLESS', [], successCB, errorCB);
 }
 
-// Show results from the query
-function successCB(tx, results) {
-    var len = results.rows.length;
-    console.log("DEMO table: " + len + " rows found.");
-    for (var i = 0; i < len; i++) {
-        console.log("Row = " + i + " ID = " + results.rows.item(i).id + " Data =  " + results.rows.item(i).data);
-    }
-}
-
+// MAIN
 var app = {
 
     // Application Constructor
@@ -145,17 +159,11 @@ var app = {
         app.receivedEvent('deviceready');
 
         // Create db
-        db = window.openDatabase(
-            app_db.name,
-            app_db.version,
-            app_db.display_name,
-            app_db.size
-        );
+        db = window.openDatabase(app_db.name, app_db.version, app_db.display_name, app_db.size);
         
         // Create tables
-        //db.transaction(populateDB, errorCB, successCB);
         // We don't need successCB as callback, it's a create TABE sql statement
-        db.transaction(initDB,errorCB);
+        db.transaction(initDB, errorCB);
         db.transaction(queryDB, errorCB);
         
         pb = document.getElementById('pb');
@@ -168,6 +176,7 @@ var app = {
             pointlessData(e, 'touchstart');
             e.preventDefault();
 
+            db = window.openDatabase(app_db.name, app_db.version, app_db.display_name, app_db.size);
             db.transaction(queryDB, errorCB);
         }, false);
 
@@ -177,6 +186,7 @@ var app = {
             e.preventDefault();
 
             save(touchData.pointless, db);
+            db = window.openDatabase(app_db.name, app_db.version, app_db.display_name, app_db.size);
             db.transaction(queryDB, errorCB);
 
         }, false);
