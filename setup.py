@@ -14,7 +14,6 @@ PLUGINS = [
 	'https://git-wip-us.apache.org/repos/asf/cordova-plugin-dialogs.git',  # Dialog notifications
 	'https://git-wip-us.apache.org/repos/asf/cordova-plugin-vibration.git',  # Vibration notifications
 	'https://git-wip-us.apache.org/repos/asf/cordova-plugin-globalization.git',  # Globalization
-	'https://github.com/lite4cordova/Cordova-SQLitePlugin.git' #Sqlite plugin
 
 ]
 
