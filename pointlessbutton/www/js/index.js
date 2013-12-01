@@ -19,15 +19,14 @@
 
 // Event-to-json
 // Main logic (temporary, will be more complex)
-var DEBUG = true;
 
 var touchData = {
-    "pointless": [],
+    "pointless": {},
 };
 var app_db = {
-    'display_name': 'Database',
+    'name': 'Database',
     'version': '1.0',
-    'table': 'Cordova Demo',
+    'display_name': 'Cordova Demo',
     'size': 65535
 };
 
@@ -42,25 +41,23 @@ function pointlessData(evt, evt_type) {
 
         var start = new Date().getTime() / 1000;
 
-        touchData["pointless"].push({
-            "x": evt.touches[0].pageX,
-            "y": evt.touches[0].pageY,
-            "start": start,
-            "location": ''
-        });
+        touchData["pointless"]["x"] = evt.touches[0].pageX;
+        touchData["pointless"]["y"] = evt.touches[0].pageY;
+        touchData["pointless"]["start"] = start;
+        touchData["pointless"]["location"] = 'location';
+
     }
 
     if (evt_type == "touchend") {
 
         var end = new Date().getTime() / 1000;
         var time = new Date();
-        var duration = 'duration';
+        var duration = touchData.start - end;
 
-        touchData["pointless"].push({
-            "end": end,
-            "time": time,
-            "duration": duration,
-        });
+        touchData["pointless"]["end"] = end;
+        touchData["pointless"]["time"] = time;
+        touchData["pointless"]["duration"] = duration;
+
     }
 
 }
@@ -71,17 +68,35 @@ function initDB(tx) {
     if (DEBUG){
         tx.executeSql('DROP TABLE IF EXISTS POINTLESS');
     }
-    tx.executeSql('CREATE TABLE IF NOT EXISTS POINTLESS (id unique, x, y, start, location, end, time, duration)');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS POINTLESS (' +
+        'id INTEGER primary key autoincrement, ' +
+        'x INTEGER, ' +
+        'y INTEGER, ' +
+        'start REAL, ' +
+        'end REAL, ' +
+        'location TEXT, ' +
+        'time TEXT, ' +
+        'duration TEXT)');
 }
 
 // Save data JSON on db 
 // TODO: check if it's start or end event or make 2 different tables and external key for reference
 function save(data, db) {
-    data = JSON.stringify(data);
-
+    
     db.transaction(function (tx) {
-        console.log('saving ' + data);
-        var sqlInsert = 'INSERT INTO POINTLESS (' + data.x + ',' + data.y + ',' + data.start + ',' + data.location + ',' + data.end + ',' + data.time + ',' + data.duration + ');';
+        console.log('saving ' + JSON.stringify(data));
+        var sqlInsert = "INSERT INTO " +
+            "POINTLESS (x, y, start, end, location, time, duration) " +
+            "VALUES ('" +
+                data.x + "', '" +
+                data.y + "', '" +
+                data.start + "', '" +
+                data.end + "', '" +
+                data.location + "', '" +
+                data.time + "', '" +
+                data.duration +
+            "')";
+
         console.log(sqlInsert);
         tx.executeSql(sqlInsert);
     }, errorCB, successCB);
@@ -90,7 +105,7 @@ function save(data, db) {
 
 // Error callback
 function errorCB(err) {
-    console.log("Error processing SQL: " + err.code);
+    console.log("[ ERROR ] Processing SQL: " + err.code + "\n" + err.message);
 }
 
 // Show table POINTLESS
@@ -106,8 +121,6 @@ function successCB(tx, results) {
     for (var i = 0; i < len; i++) {
         console.log("Row = " + i + " ID = " + results.rows.item(i).id + " Data =  " + results.rows.item(i).data);
     }
-    
-    //debug2.innerHTML = JSON.stringify(results, undefined, 2);
 }
 
 var app = {
@@ -133,9 +146,9 @@ var app = {
 
         // Create db
         db = window.openDatabase(
-            app_db.display_name,
+            app_db.name,
             app_db.version,
-            app_db.table,
+            app_db.display_name,
             app_db.size
         );
         
