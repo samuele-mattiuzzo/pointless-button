@@ -23,6 +23,7 @@
 var touchData = {
     "pointless": {},
 };
+
 var app_db = {
     'name': 'Database',
     'version': '1.0',
