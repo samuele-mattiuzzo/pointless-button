@@ -73,6 +73,14 @@ function initDB(tx) {
     }
 }
 
+function queryDB(query, table_name, db) {
+
+    db.transaction(function (tx) {
+        console.log('executing ' + query);
+        tx.executeSql(query, [], successCB, errorCB);
+    }, errorCB);
+}
+
 /*
 * Reads and saves a JSON object, constructing the query dynamically
 * Requires a table name. Ignores ID field when saving (auto generated)
