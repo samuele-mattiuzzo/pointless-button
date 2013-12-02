@@ -28,6 +28,39 @@ DB_TABLES = {
     }
 };
 
+var DB_OBJ = '';
+
+var db_layer = {
+    
+    initialize: function(){
+        this.bindEvents();
+    },
+
+    bindEvents: function() {
+        document.addEventListener('deviceready', this.onDeviceReady, false);
+    },
+
+    onDeviceReady: function() {
+        db_layer.receivedEvent('deviceready');
+        DB_OBJ = openDB('pointless');
+        DB_OBJ.transaction(initDB, errorCB);
+    },
+    
+    // Update DOM on a Received Event
+    receivedEvent: function(id) {
+        console.log('Received Event: ' + id);
+    }
+};
+
+function openDB(name) {
+    return window.openDatabase(
+        DATABASES[name].name,
+        DATABASES[name].version,
+        DATABASES[name].display_name,
+        DATABASES[name].size
+    );
+}
+
 /*
 * Initializes all the tables in the database
 * DEBUG must always be false when creating a release build
