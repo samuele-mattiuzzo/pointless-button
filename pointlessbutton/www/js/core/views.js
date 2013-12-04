@@ -43,7 +43,7 @@ function MainViewModel() {
     // Data
     var self = this;
     
-    self.pages = ['Menu', 'Button', 'Profile', 'Achievements'];
+    self.pages = ['Button', 'Profile', 'Achievements', 'Menu'];
     self.chosenPageId = ko.observable();
     self.chosenPageData = ko.observable();
 
@@ -52,6 +52,9 @@ function MainViewModel() {
         self.chosenPageId(page);
         $.get('/', { page: page }, self.chosenPageData);
     };
+
+    // Show Button by default
+    self.goToPage('Button');
 }
 
 //ko.applyBindings(new MainViewModel());
