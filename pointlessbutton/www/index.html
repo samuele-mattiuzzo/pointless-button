@@ -31,23 +31,16 @@
 
 <body>
 
-    <div class="app">
-        <!-- MENU -->
-        <div class="topcoat-button-bar">
-            <div class="topcoat-button-bar__item">
-                <button class="topcoat-button-bar__button">Menu</button>
-            </div>
-            <div class="topcoat-button-bar__item">
-                <button class="topcoat-button-bar__button">Button</button>
-            </div>
-            <div class="topcoat-button-bar__item">
-                <button class="topcoat-button-bar__button">Profile</button>
-            </div>
-            <div class="topcoat-button-bar__item">
-                <button class="topcoat-button-bar__button">Achievements</button>
-            </div>
+    <div id="app" class="app">
+        <div class="topcoat-button-bar" data-bind="foreach: pages">
+            <button class="topcoat-button-bar__button" data-bind="text: $data, 
+                   css: { selected: $data == $root.chosenPageId() },
+                   click: $root.goToPage"/>
         </div>
-        
+
+
+
+
         <h1>Pointless Button</h1>
         <div id="deviceready">
             <a href="#" id="pb">Push me!</a>
@@ -75,6 +68,7 @@
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript">
     app.initialize();
+    ko.applyBindings(new MainViewModel());
     </script>
 
 </body>
